@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+
+.btn.disabled {
+    pointer-events: none;
+}
+
+/* Bootstrap uses reboot.css which sets the 'vertical-align' property of SVG elements to: 'middle'.
+However, the 'vertical-align' property of the SVG icons of angular-notifier should be: 'baseline' */
+.notifier__notification-button-icon{
+    vertical-align: baseline;
+}

@@ -1,0 +1,32 @@
+<ng-template #content let-modal>
+  <form (ngSubmit)="share()">
+    <div class="modal-header">
+      <h4 class="modal-title">Share</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeForm()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <div ngbDropdown #shareDropdown="ngbDropdown" class="d-inline-block">
+        <button class="btn btn-outline-primary" ngbDropdownToggle data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false" type="button">Share with</button>
+        <span *ngIf="selectedUser"> &emsp; {{selectedUser.username}}</span>
+        <div class="dropdown-menu" ngbDropdownMenu>
+          <div class="px-1 py-1">
+            <input type="text" class="form-control" #searchBox (input)="search(searchBox.value)" placeholder="Search user">
+          </div>
+          <div class="dropdown-divider"></div>
+          <button *ngFor="let user of users$ | async" class="dropdown-item" type="button" (click)="selectUser(user); $event.stopPropagation(); shareDropdown.close();">
+            {{user.username}} </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancel</button>
+      <button class="btn btn-primary" [disabled]="!selectedUser">Share</button>
+    </div>
+  </form>
+</ng-template>

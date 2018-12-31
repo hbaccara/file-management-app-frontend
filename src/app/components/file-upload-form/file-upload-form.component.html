@@ -1,0 +1,28 @@
+<ng-template #content let-modal>
+  <form (ngSubmit)="upload()">
+    <div class="modal-header">
+      <h4 class="modal-title">Upload file</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeForm()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <div *ngIf="currentFileUpload" class="progress">
+        <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+          aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width:progress.percentage+'%'}">
+          {{progress.percentage}}%</div>
+      </div>
+
+      <label class="btn btn-default">
+        <input type="file" (change)="selectFile($event)">
+      </label>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeForm()">
+        Close</button>
+      <button class="btn btn-primary" [disabled]="!(selectedFiles && selectedFiles.length > 0)">Upload</button>
+    </div>
+  </form>
+</ng-template>

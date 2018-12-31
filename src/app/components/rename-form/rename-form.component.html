@@ -1,0 +1,19 @@
+<ng-template #content let-modal>
+  <form (ngSubmit)="rename()">
+    <div class="modal-header">
+      <h4 class="modal-title">Rename</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeForm()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label for="folder-name">New name</label>
+      <input type="text" [(ngModel)]="newName" name="newName" class="form-control" id="item-name" placeholder="Enter the new name"
+        autocomplete="off">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeForm()">Close</button>
+      <button type="button" class="btn btn-primary" [disabled]="!newName">Rename</button>
+    </div>
+  </form>
+</ng-template>

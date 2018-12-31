@@ -1,0 +1,19 @@
+<ng-template #content let-modal>
+  <form (ngSubmit)="createFolder()">
+    <div class="modal-header">
+      <h4 class="modal-title">Create folder</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeForm()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label for="folder-name">Folder name</label>
+      <input type="text" [(ngModel)]="folderName" name="folderName" class="form-control" id="folder-name" placeholder="Enter the folder name"
+        autocomplete="off">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeForm()">Close</button>
+      <button type="button" class="btn btn-primary" [class.disabled]="!folderName">Create</button>
+    </div>
+  </form>
+</ng-template>

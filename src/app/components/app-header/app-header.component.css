@@ -1,0 +1,16 @@
+#app-logo{
+    width: 48px;
+    height: 48px;
+}
+
+#notifications-dropdown-menu{
+    width: max-content;
+}
+
+.notification.unread{
+    background-color: aquamarine;
+}
+
+.dropdown-toggle::after {
+    display:none;
+}
