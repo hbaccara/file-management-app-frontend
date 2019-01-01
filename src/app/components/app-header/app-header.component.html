@@ -19,7 +19,7 @@
               <ul *ngSwitchCase="true" class="notifications">
 
                   <li *ngFor="let notification of notifications" class="notification" (click)="markNotificationAsRead(notification)"
-                      [class.unread]="!notification.isRead">
+                      [class.active]="!notification.isRead">
                       <div class="media">
                           <div class="media-body">
                               <strong class="notification-title">{{getNotificationTitle(notification)}}</strong>

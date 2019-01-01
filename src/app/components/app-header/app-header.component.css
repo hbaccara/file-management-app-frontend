@@ -7,10 +7,6 @@
     width: max-content;
 }
 
-.notification.unread{
-    background-color: aquamarine;
-}
-
 .dropdown-toggle::after {
     display:none;
 }
