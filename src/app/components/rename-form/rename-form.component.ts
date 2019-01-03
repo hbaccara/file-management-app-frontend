@@ -40,7 +40,10 @@ export class RenameFormComponent implements OnInit {
 
   private getEditableName(file: File): string {
 
-    if (!file.isFolder) {
+    if (file.isFolder) {
+      return file.name;
+    }
+    else {
       let lastDotPosition = file.name.lastIndexOf(".");
       if (lastDotPosition > 0) {
         return file.name.substring(0, lastDotPosition);
@@ -49,14 +52,14 @@ export class RenameFormComponent implements OnInit {
         return file.name;
       }
     }
-    else {
-      return file.name;
-    }
   }
 
   private getExtension(file: File): string {
 
-    if (!file.isFolder) {
+    if (file.isFolder) {
+      return null;
+    }
+    else {
       let lastDotPosition = file.name.lastIndexOf(".");
       if (lastDotPosition > 0 && lastDotPosition != file.name.length - 1) {
         return file.name.substring(lastDotPosition + 1);
@@ -64,9 +67,6 @@ export class RenameFormComponent implements OnInit {
       else {
         return null;
       }
-    }
-    else {
-      return null;
     }
   }
 

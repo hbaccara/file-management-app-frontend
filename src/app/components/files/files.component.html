@@ -14,10 +14,10 @@
 
 <div class="mb-2 d-flex justify-content-between">
   <div>
-    <button class="btn btn-primary mr-2" (click)="createNewFolder()">
-      <i class="fas fa-folder-plus"></i> New folder...</button>
-    <button class="btn btn-primary mr-2" (click)="uploadFile()">
-      <i class="fas fa-file-upload"></i> Upload file...</button>
+    <div class="btn btn-primary mr-2" (click)="createNewFolder()">
+      <i class="fas fa-folder-plus"></i> New folder...</div>
+    <div class="btn btn-primary mr-2" (click)="uploadFile()">
+      <i class="fas fa-file-upload"></i> Upload file...</div>
   </div>
   <div class="">
     <div (click)="download()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">

@@ -120,15 +120,14 @@ export class AppHeaderComponent implements OnInit {
     if (notification.type == NotificationType[NotificationType.FILE_SHARED]) {
       let fileShareNotification = notification as FileShareNotification;
 
-      if (!fileShareNotification.isFolder) {
-        // download the file
-        this.fileService.download(fileShareNotification.fileId);
-      }
-      else {
+      if (fileShareNotification.isFolder) {
         // open the folder
         this.router.navigate(['directory', fileShareNotification.fileId]);
       }
-
+      else {
+        // download the file
+        this.fileService.download(fileShareNotification.fileId);
+      }
     }
   }
 }

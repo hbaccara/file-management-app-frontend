@@ -97,13 +97,13 @@ export class FilesComponent implements OnInit {
   }
 
   openOrDownload(file: File): void {
-    if (!file.isFolder) {
-      // download the file
-      this.fileService.download(file.id);
-    }
-    else {
+    if (file.isFolder) {
       // open the folder
       this.router.navigate(['directory', file.id]);
+    }
+    else {
+      // download the file
+      this.fileService.download(file.id);
     }
   }
 
@@ -139,25 +139,20 @@ export class FilesComponent implements OnInit {
 
     if (file) {
       let type;
-      if (!file.isFolder) {
+      if (file.isFolder) {
+        type = "folder";
+      }
+      else { 
+        type = "file";
+
         let lastDotPosition = file.name.lastIndexOf(".");
         if (lastDotPosition > 0 && lastDotPosition != file.name.length - 1) {
           let fileExtension = file.name.substring(lastDotPosition + 1);
-          if (!FILE_EXTENSIONS.find(x => x === fileExtension)) {
-            type = "file";
-          }
-          else {
+          if (FILE_EXTENSIONS.find(x => x === fileExtension)) {
             type = fileExtension;
           }
         }
-        else {
-          type = "file";
-        }
       }
-      else {
-        type = "folder";
-      }
-
       return `../../assets/file-icons/${type}.png`;
     }
   }
