@@ -21,6 +21,7 @@ import { NotifierModule } from 'angular-notifier';
 import { FileShareFormComponent } from './components/file-share-form/file-share-form.component';
 import { DeleteConfirmFormComponent } from './components/delete-confirm-form/delete-confirm-form.component';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
+import { ExcludeUserPipe } from './pipes/exclude-user.pipe';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AppHeaderComponent } from './components/app-header/app-header.component
     UserRegistrationComponent,
     FileShareFormComponent,
     DeleteConfirmFormComponent,
-    AppHeaderComponent
+    AppHeaderComponent,
+    ExcludeUserPipe
   ],
   imports: [
     BrowserModule,
