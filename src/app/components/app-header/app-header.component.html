@@ -1,13 +1,13 @@
 <div class="d-flex justify-content-between">
-    <div class="pl-2 d-flex">
+    <a id="app-logo-link" routerLink="/home" class="pl-2 d-flex">
         <img id="app-logo" src="../assets/hard-drive-48.png" class="mt-1" />
         <h1 class="text-center pl-1">My Drive</h1>
-    </div>
+    </a>
 
     <form class="pt-2" (ngSubmit)="search()" *ngIf="authService.isLoggedIn()">
         <div class="input-group">
-            <input type="text" [(ngModel)]="fileSearchService.searchTerm" name="searchTerm" class="form-control" 
-            autocomplete="off" placeholder="Search...">
+            <input type="text" [(ngModel)]="fileSearchService.searchTerm" name="searchTerm" class="form-control"
+                autocomplete="off" placeholder="Search...">
             <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">
                     <i class="fa fa-search"></i>
