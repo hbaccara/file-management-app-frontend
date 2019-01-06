@@ -1,4 +1,23 @@
-.default-cursor {cursor: default;}
+#sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 200px;
+}
+
+#files-component-content {
+  position: absolute;
+  top: 0;
+  left: 200px;
+  right: 0;
+  bottom: 0;
+  width: auto;
+}
+
+.default-cursor {
+  cursor: default;
+}
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */

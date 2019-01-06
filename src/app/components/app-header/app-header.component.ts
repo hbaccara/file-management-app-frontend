@@ -11,6 +11,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
 import { NotificationType } from '../../enums/notification-type.enum';
+import { FileSearchService } from 'src/app/services/file-search.service';
 
 @Component({
   selector: 'app-header',
@@ -28,6 +29,7 @@ export class AppHeaderComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private fileService: FileService,
+    private fileSearchService: FileSearchService,
     private notificationService: NotificationService,
     private router: Router,
     private rxStompService: RxStompService,
@@ -55,6 +57,10 @@ export class AppHeaderComponent implements OnInit {
 
   ngOnDestroy() {
     this.wsSubscription.unsubscribe();
+  }
+
+  search(): void{
+    this.router.navigate([`files/search`], { queryParams: { q: this.fileSearchService.searchTerm }});
   }
 
   logout(): void {

@@ -10,8 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FILE_EXTENSIONS } from '../../constants/file-extensions';
 import { AuthService } from '../../services/auth.service';
-import { RxStompService } from '@stomp/ng2-stompjs';
-import { NotifierService } from 'angular-notifier';
+import { FileSearchService } from 'src/app/services/file-search.service';
 
 @Component({
   selector: 'app-files',
@@ -41,14 +40,15 @@ export class FilesComponent implements OnInit {
 
   loadingData: boolean = false;
   dataLoadingFailed: boolean = false;
+  isSearchPage: boolean = false;
+  isSharedWithMePage: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fileService: FileService,
     private authService: AuthService,
-    private rxStompService: RxStompService,
-    private notifierService: NotifierService
+    private fileSearchService: FileSearchService
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
@@ -56,9 +56,27 @@ export class FilesComponent implements OnInit {
   }
 
   ngOnInit() {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.currentDirectoryId = id ? id : -1;
-    this.getFiles();
+    if (this.router.url.indexOf("home") > -1){
+      this.currentDirectoryId = -1;
+      this.getFiles();
+    }
+    else if (this.router.url.indexOf("directory") > -1){
+      this.currentDirectoryId = +this.route.snapshot.paramMap.get('id');
+      this.getFiles();
+    }
+    else if (this.router.url.indexOf("search") > -1){
+      const searchTerm = this.route.snapshot.queryParamMap.get('q');
+      this.searchFiles(searchTerm);
+      this.isSearchPage = true;
+    }
+    else if (this.router.url.indexOf("shared-with-me") > -1){
+      this.getFilesSharedWithUser();
+      this.isSharedWithMePage = true;
+    }
+
+    if (!this.isSearchPage){
+      this.fileSearchService.clearSearchTerm();
+    }
   }
 
   share() {
@@ -72,15 +90,47 @@ export class FilesComponent implements OnInit {
     this.fileService.getFiles(this.authService.userId, this.currentDirectoryId)
       .subscribe(response => {
 
-        this.files = response.files
-          .sort((i1, i2) => (i1.name < i2.name ? -1 : 1))
-          .sort((i1, i2) => {
-            if (i1.isFolder && !i2.isFolder) return -1;
-            else if (!i1.isFolder && i2.isFolder) return 1;
-            else return 0;
-          });
+        this.files = this.sortFiles(response.files);
 
         this.hierarchy = response.hierarchy;
+
+        this.loadingData = false;
+        this.dataLoadingFailed = false;
+        
+      }, err => {
+          console.log("Data loading failed!");
+          this.loadingData = false;
+          this.dataLoadingFailed = true;
+        });
+  }
+
+  searchFiles(searchTerm: string): void {
+
+    this.loadingData = true;
+
+    this.fileService.searchFiles(this.authService.userId, searchTerm)
+      .subscribe(files => {
+
+        this.files = this.sortFiles(files);
+
+        this.loadingData = false;
+        this.dataLoadingFailed = false;
+        
+      }, err => {
+          console.log("Data loading failed!");
+          this.loadingData = false;
+          this.dataLoadingFailed = true;
+        });
+  }
+
+  getFilesSharedWithUser(): void {
+
+    this.loadingData = true;
+
+    this.fileService.getFilesSharedWithUser(this.authService.userId)
+      .subscribe(files => {
+
+        this.files = this.sortFiles(files);
 
         this.loadingData = false;
         this.dataLoadingFailed = false;
@@ -133,6 +183,16 @@ export class FilesComponent implements OnInit {
 
   isHierarchyEmpty(): boolean {
     return !(!!this.hierarchy && this.hierarchy.length > 0);
+  }
+
+  private sortFiles(files: File[]): File[]{
+    return files
+    .sort((i1, i2) => (i1.name < i2.name ? -1 : 1))
+    .sort((i1, i2) => {
+      if (i1.isFolder && !i2.isFolder) return -1;
+      else if (!i1.isFolder && i2.isFolder) return 1;
+      else return 0;
+    });
   }
 
   getIconUri(file: File): string {

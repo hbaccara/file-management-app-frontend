@@ -32,13 +32,21 @@ export class FileService {
     return this.http.request(req);
   }
 
-  /** GET directory items from the server */
   getFiles(userId: number, directoryId: number): Observable<any> {
 
     return this.http.get<File[]>(`${this.apiUrl}/directory/${directoryId}?userId=${userId}`);
   }
 
-  /** GET directory items from the server */
+  searchFiles(userId: number, searchTerm: string): Observable<File[]> {
+
+    return this.http.get<File[]>(`${this.apiUrl}/files/search?userId=${userId}&searchTerm=${searchTerm}`);
+  }
+
+  getFilesSharedWithUser(userId: number): Observable<File[]> {
+
+    return this.http.get<File[]>(`${this.apiUrl}/files/shared-with-user?userId=${userId}`);
+  }
+
   download(id: number): void {
 
     window.location.href=`${this.apiUrl}/directory/download/${id}`;

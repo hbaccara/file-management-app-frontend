@@ -43,6 +43,8 @@ export class FolderCreationFormComponent implements OnInit {
 
   createFolder(): void {
 
+console.log(this.folderName);
+
     if (!this.folderName) return;
 
     this.fileService.createFolder(this.authService.userId, this.currentDirectoryId, this.folderName)

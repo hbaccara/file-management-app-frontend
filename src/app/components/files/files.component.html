@@ -1,80 +1,99 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item" [class.active]="isHierarchyEmpty()" aria-current="page" [ngSwitch]="isHierarchyEmpty()">
-      <a *ngSwitchCase="false" routerLink="/home">Home</a>
-      <span *ngSwitchCase="true">Home</span>
+<div id="sidebar" *ngIf="authService.isLoggedIn()" class="container pt-2 border-right">
+  <ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home" routerLinkActive="active">My Drive</a>
     </li>
-    <li class="breadcrumb-item" [class.active]="isLast" [ngSwitch]="isLast" *ngFor="let item of hierarchy; last as isLast;"
-      aria-current="page">
-      <a *ngSwitchCase="false" routerLink="{{'../../directory/' + item.id}}">{{item.name}}</a>
-      <span *ngSwitchCase="true">{{item.name}}</span>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/shared-with-me" routerLinkActive="active">Shared with me</a>
     </li>
-  </ol>
-</nav>
-
-<div class="mb-2 d-flex justify-content-between">
-  <div>
-    <div class="btn btn-primary mr-2" (click)="createNewFolder()">
-      <i class="fas fa-folder-plus"></i> New folder...</div>
-    <div class="btn btn-primary mr-2" (click)="uploadFile()">
-      <i class="fas fa-file-upload"></i> Upload file...</div>
-  </div>
-  <div class="">
-    <div (click)="download()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
-      <i class="fas fa-download"></i> Download
-    </div>
-    <div (click)="rename()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
-      <i class="fas fa-edit"></i> Rename
-    </div>
-    <div (click)="share()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
-      <i class="fas fa-share"></i> Share
-    </div>
-    <div (click)="delete()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
-      <i class="fas fa-trash"></i> Delete
-    </div>
-  </div>
+  </ul>
 </div>
 
-<div class="alert alert-primary" *ngIf="loadingData">
-  <i class="fas fa-circle-notch fa-spin"></i>
-  Loading...
-</div>
+<div id="files-component-content" class="container pt-2">
+  <nav aria-label="breadcrumb" [ngSwitch]="isSearchPage || isSharedWithMePage">
+    <ol class="breadcrumb" *ngSwitchCase="false">
+      <li class="breadcrumb-item" [class.active]="isHierarchyEmpty()" aria-current="page" [ngSwitch]="isHierarchyEmpty()">
+        <a *ngSwitchCase="false" routerLink="/home">My Drive</a>
+        <span *ngSwitchCase="true">My Drive</span>
+      </li>
+      <li class="breadcrumb-item" [class.active]="isLast" [ngSwitch]="isLast" *ngFor="let item of hierarchy; last as isLast;"
+        aria-current="page">
+        <a *ngSwitchCase="false" routerLink="{{'../../directory/' + item.id}}">{{item.name}}</a>
+        <span *ngSwitchCase="true">{{item.name}}</span>
+      </li>
+    </ol>
+    <ol class="breadcrumb" *ngSwitchCase="true">
+      <li class="breadcrumb-item active" aria-current="page">
+        <span *ngIf="isSearchPage">Search results</span>
+        <span *ngIf="isSharedWithMePage">Shared with me</span>
+      </li>
+    </ol>
+  </nav>
 
-<div class="alert alert-danger" role="alert" *ngIf="dataLoadingFailed">
-  An error occured while loading data!
-</div>
-
-<div [ngSwitch]="files && files.length > 0">
-  
-  <div *ngSwitchCase="false">
-    <div class="alert alert-light" role="alert" *ngIf="!loadingData && !dataLoadingFailed">
-      There aren't any files here!
+  <div class="mb-2 d-flex justify-content-between">
+    <div>
+      <div class="btn btn-primary mr-2" (click)="createNewFolder()">
+        <i class="fas fa-folder-plus"></i> New folder...</div>
+      <div class="btn btn-primary mr-2" (click)="uploadFile()">
+        <i class="fas fa-file-upload"></i> Upload file...</div>
+    </div>
+    <div class="">
+      <div (click)="download()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
+        <i class="fas fa-download"></i> Download
+      </div>
+      <div (click)="rename()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
+        <i class="fas fa-edit"></i> Rename
+      </div>
+      <div (click)="share()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
+        <i class="fas fa-share"></i> Share
+      </div>
+      <div (click)="delete()" class="btn btn-primary" [class.disabled]="!selectedFile">
+        <i class="fas fa-trash"></i> Delete
+      </div>
     </div>
   </div>
 
-  <table class="table table-hover" *ngSwitchCase="true">
-    <thead>
-      <tr class="d-flex">
-        <th class="col-6">Name</th>
-        <th class="col-2">Owner</th>
-        <th class="col-2">Last modified</th>
-        <th class="col-2">Size</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of files" class="d-flex noselect default-cursor align-middle" [ngClass]="{'table-active': item === selectedFile}"
-        (click)="select(item)" (dblclick)="openOrDownload(item)" [@fadeInOut]>
-        <td class="col-6">
-          <span><img class="mr-2" src={{getIconUri(item)}}></span>{{item.name}}</td>
-        <td class="col-2">{{item.ownerId === authService.userId ? 'me' : item.ownerName}}</td>
-        <td class="col-2">{{item.updateDate | date:'dd/MM/yyyy'}}</td>
-        <td class="col-2" [ngSwitch]="item.isFolder">
-          <span *ngSwitchCase="true">-</span>
-          <span *ngSwitchCase="false">{{item.size | fileSize}}</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="alert alert-primary" *ngIf="loadingData">
+    <i class="fas fa-circle-notch fa-spin"></i>
+    Loading...
+  </div>
+
+  <div class="alert alert-danger" role="alert" *ngIf="dataLoadingFailed">
+    An error occured while loading data!
+  </div>
+
+  <div [ngSwitch]="files && files.length > 0">
+
+    <div *ngSwitchCase="false">
+      <div class="alert alert-light" role="alert" *ngIf="!loadingData && !dataLoadingFailed">
+        There aren't any files here!
+      </div>
+    </div>
+
+    <table class="table table-hover" *ngSwitchCase="true">
+      <thead>
+        <tr class="d-flex">
+          <th class="col-6">Name</th>
+          <th class="col-2">Owner</th>
+          <th class="col-2">Last modified</th>
+          <th class="col-2">Size</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of files" class="d-flex noselect default-cursor align-middle" [ngClass]="{'table-active': item === selectedFile}"
+          (click)="select(item)" (dblclick)="openOrDownload(item)" [@fadeInOut]>
+          <td class="col-6">
+            <span><img class="mr-2" src={{getIconUri(item)}}></span>{{item.name}}</td>
+          <td class="col-2">{{item.ownerId === authService.userId ? 'me' : item.ownerName}}</td>
+          <td class="col-2">{{item.updateDate | date:'dd/MM/yyyy'}}</td>
+          <td class="col-2" [ngSwitch]="item.isFolder">
+            <span *ngSwitchCase="true">-</span>
+            <span *ngSwitchCase="false">{{item.size | fileSize}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <app-folder-creation-form [files]="files"></app-folder-creation-form>

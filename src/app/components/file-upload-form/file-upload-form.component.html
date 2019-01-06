@@ -2,9 +2,9 @@
   <form (ngSubmit)="upload()">
     <div class="modal-header">
       <h4 class="modal-title">Upload file</h4>
-      <button type="button" class="close" aria-label="Close" (click)="closeForm()">
+      <div class="close" aria-label="Close" (click)="closeForm()">
         <span aria-hidden="true">&times;</span>
-      </button>
+      </div>
     </div>
     <div class="modal-body">
 
@@ -20,9 +20,9 @@
 
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="closeForm()">
-        Close</button>
-      <button class="btn btn-primary" [disabled]="!(selectedFiles && selectedFiles.length > 0)">Upload</button>
+      <div class="btn btn-secondary" (click)="closeForm()">
+        Close</div>
+      <button type="submit" class="btn btn-primary" [disabled]="!(selectedFiles && selectedFiles.length > 0)">Upload</button>
     </div>
   </form>
 </ng-template>

@@ -10,6 +10,8 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: FilesComponent, canActivate: [AuthGuard] },
   { path: 'directory/:id', component: FilesComponent, canActivate: [AuthGuard] },
+  { path: 'files/search', component: FilesComponent, canActivate: [AuthGuard] },
+  { path: 'shared-with-me', component: FilesComponent, canActivate: [AuthGuard] },
   { path: 'register', component: UserRegistrationComponent, canActivate: [LoggedInGuard] },
   { path: 'login', component: LoginComponent, canActivate: [LoggedInGuard] }
 ];
