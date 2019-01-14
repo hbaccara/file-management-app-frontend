@@ -67,7 +67,6 @@ export class FileService {
     formdata.append('parentId', `${parentId}`);
     formdata.append('folderName', folderName);
 
-    console.log("sending request...");
     return this.http.post<File>(this.apiUrl + '/folder', formdata);
   }
 
@@ -77,7 +76,15 @@ export class FileService {
     formdata.append('id', `${itemId}`);
     formdata.append('newName', newName);
 
-    console.log("sending request...");
-    return this.http.put<File>(this.apiUrl + '/directory', formdata)
+    return this.http.put<File>(this.apiUrl + '/file/rename', formdata)
+  }
+
+  move(itemId: number, newParentId: number): Observable<File> {
+    const formdata: FormData = new FormData();
+
+    formdata.append('id', `${itemId}`);
+    formdata.append('newParentId', `${newParentId}`);
+
+    return this.http.put<File>(this.apiUrl + '/file/move', formdata)
   }
 }

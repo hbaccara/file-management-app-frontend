@@ -34,7 +34,7 @@ export class FolderCreationFormComponent implements OnInit {
     this.modal = this.modalService.open(this.content, { centered: true });
   }
 
-  closeForm(): void{
+  closeForm(): void {
     this.modal.close();
 
     // clear the name input
@@ -43,7 +43,7 @@ export class FolderCreationFormComponent implements OnInit {
 
   createFolder(): void {
 
-console.log(this.folderName);
+    console.log(this.folderName);
 
     if (!this.folderName) return;
 
@@ -56,7 +56,7 @@ console.log(this.folderName);
 
         this.closeForm();
         this.notifierService.notify('success', 'Folder created!');
-        
+
       }, (err) => {
         this.notifierService.notify('error', 'An error occured while creating the folder!');
       });

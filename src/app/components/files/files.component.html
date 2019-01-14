@@ -9,90 +9,97 @@
   </ul>
 </div>
 
-<div id="files-component-content" class="container pt-2">
-  <nav aria-label="breadcrumb" [ngSwitch]="isSearchPage || isSharedWithMePage">
-    <ol class="breadcrumb" *ngSwitchCase="false">
-      <li class="breadcrumb-item" [class.active]="isHierarchyEmpty()" aria-current="page" [ngSwitch]="isHierarchyEmpty()">
-        <a *ngSwitchCase="false" routerLink="/home">My Drive</a>
-        <span *ngSwitchCase="true">My Drive</span>
-      </li>
-      <li class="breadcrumb-item" [class.active]="isLast" [ngSwitch]="isLast" *ngFor="let item of hierarchy; last as isLast;"
-        aria-current="page">
-        <a *ngSwitchCase="false" routerLink="{{'../../directory/' + item.id}}">{{item.name}}</a>
-        <span *ngSwitchCase="true">{{item.name}}</span>
-      </li>
-    </ol>
-    <ol class="breadcrumb" *ngSwitchCase="true">
-      <li class="breadcrumb-item active" aria-current="page">
-        <span *ngIf="isSearchPage">Search results</span>
-        <span *ngIf="isSharedWithMePage">Shared with me</span>
-      </li>
-    </ol>
-  </nav>
+<div id="files-component-content">
+  <div id="control-area" class="container pt-2">
+    <nav aria-label="breadcrumb" [ngSwitch]="isSearchPage || isSharedWithMePage">
+      <ol class="breadcrumb" *ngSwitchCase="false">
+        <li class="breadcrumb-item" [class.active]="isHierarchyEmpty()" aria-current="page" [ngSwitch]="isHierarchyEmpty()">
+          <a *ngSwitchCase="false" routerLink="/home">My Drive</a>
+          <span *ngSwitchCase="true">My Drive</span>
+        </li>
+        <li class="breadcrumb-item" [class.active]="isLast" [ngSwitch]="isLast" *ngFor="let item of hierarchy; last as isLast;"
+          aria-current="page">
+          <a *ngSwitchCase="false" routerLink="{{'../../directory/' + item.id}}">{{item.name}}</a>
+          <span *ngSwitchCase="true">{{item.name}}</span>
+        </li>
+      </ol>
+      <ol class="breadcrumb" *ngSwitchCase="true">
+        <li class="breadcrumb-item active" aria-current="page">
+          <span *ngIf="isSearchPage">Search results</span>
+          <span *ngIf="isSharedWithMePage">Shared with me</span>
+        </li>
+      </ol>
+    </nav>
 
-  <div class="mb-2 d-flex justify-content-between">
-    <div>
-      <div class="btn btn-primary mr-2" (click)="createNewFolder()">
-        <i class="fas fa-folder-plus"></i> New folder...</div>
-      <div class="btn btn-primary mr-2" (click)="uploadFile()">
-        <i class="fas fa-file-upload"></i> Upload file...</div>
-    </div>
-    <div class="">
-      <div (click)="download()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
-        <i class="fas fa-download"></i> Download
+    <div class="mb-2 d-flex justify-content-between">
+      <div>
+        <div class="btn btn-primary mr-2" (click)="createNewFolder()">
+          <i class="fas fa-folder-plus"></i> New folder...</div>
+        <div class="btn btn-primary mr-2" (click)="uploadFile()">
+          <i class="fas fa-file-upload"></i> Upload file...</div>
       </div>
-      <div (click)="rename()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
-        <i class="fas fa-edit"></i> Rename
-      </div>
-      <div (click)="share()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
-        <i class="fas fa-share"></i> Share
-      </div>
-      <div (click)="delete()" class="btn btn-primary" [class.disabled]="!selectedFile">
-        <i class="fas fa-trash"></i> Delete
+      <div>
+        <div (click)="download()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
+          <i class="fas fa-download"></i> Download
+        </div>
+        <div (click)="rename()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
+          <i class="fas fa-edit"></i> Rename
+        </div>
+        <div (click)="share()" class="btn btn-primary mr-2" [class.disabled]="!selectedFile">
+          <i class="fas fa-share"></i> Share
+        </div>
+        <div (click)="delete()" class="btn btn-primary" [class.disabled]="!selectedFile">
+          <i class="fas fa-trash"></i> Delete
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="alert alert-primary" *ngIf="loadingData">
-    <i class="fas fa-circle-notch fa-spin"></i>
-    Loading...
-  </div>
+  <div id="data-table-area" class="container pt-2" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)">
 
-  <div class="alert alert-danger" role="alert" *ngIf="dataLoadingFailed">
-    An error occured while loading data!
-  </div>
-
-  <div [ngSwitch]="files && files.length > 0">
-
-    <div *ngSwitchCase="false">
-      <div class="alert alert-light" role="alert" *ngIf="!loadingData && !dataLoadingFailed">
-        There aren't any files here!
-      </div>
+    <div class="alert alert-primary" *ngIf="loadingData">
+      <i class="fas fa-circle-notch fa-spin"></i>
+      Loading...
     </div>
 
-    <table class="table table-hover" *ngSwitchCase="true">
-      <thead>
-        <tr class="d-flex">
-          <th class="col-6">Name</th>
-          <th class="col-2">Owner</th>
-          <th class="col-2">Last modified</th>
-          <th class="col-2">Size</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of files" class="d-flex noselect default-cursor align-middle" [ngClass]="{'table-active': item === selectedFile}"
-          (click)="select(item)" (dblclick)="openOrDownload(item)" [@fadeInOut]>
-          <td class="col-6">
-            <span><img class="mr-2" src={{getIconUri(item)}}></span>{{item.name}}</td>
-          <td class="col-2">{{item.ownerId === authService.userId ? 'me' : item.ownerName}}</td>
-          <td class="col-2">{{item.updateDate | date:'dd/MM/yyyy'}}</td>
-          <td class="col-2" [ngSwitch]="item.isFolder">
-            <span *ngSwitchCase="true">-</span>
-            <span *ngSwitchCase="false">{{item.size | fileSize}}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="alert alert-danger" role="alert" *ngIf="dataLoadingFailed">
+      An error occured while loading data!
+    </div>
+
+    <div [ngSwitch]="files && files.length > 0">
+
+      <div *ngSwitchCase="false">
+        <div class="alert alert-light" role="alert" *ngIf="!loadingData && !dataLoadingFailed">
+          There aren't any files here!
+        </div>
+      </div>
+
+      <table class="table table-hover" *ngSwitchCase="true">
+        <thead>
+          <tr class="d-flex" [ngClass]="{'table-primary': tableIsDraggedOver}">
+            <th class="col-6">Name</th>
+            <th class="col-2">Owner</th>
+            <th class="col-2">Last modified</th>
+            <th class="col-2">Size</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of files" class="d-flex noselect default-cursor align-middle" [@fadeInOut] [ngClass]="{'table-active': item === selectedFile && !tableIsDraggedOver, 'table-primary': (item === draggedOverFolder || tableIsDraggedOver)}"
+            (click)="select(item)" (dblclick)="openOrDownload(item)" draggable="true" (dragstart)="onDragStart($event, item)"
+            (dragover)="onDragOver($event, item)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event, item)">
+            <td class="col-6">
+              <span><img class="mr-2" src={{getIconUri(item)}}></span>{{item.name}}</td>
+            <td class="col-2">{{item.ownerId === authService.userId ? 'me' : item.ownerName}}</td>
+            <td class="col-2">{{item.updateDate | date:'dd/MM/yyyy'}}</td>
+            <td class="col-2" [ngSwitch]="item.isFolder">
+              <span *ngSwitchCase="true">-</span>
+              <span *ngSwitchCase="false">{{item.size | fileSize}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 

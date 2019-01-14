@@ -21,7 +21,6 @@ export class UserService {
     formdata.append('username', username);
     formdata.append('password', password);
 
-    console.log("sending request...");
     return this.http.post<any>(this.apiUrl + '/user/login', formdata);
   }
 
@@ -31,7 +30,6 @@ export class UserService {
 
     formdata.append('userId', `${userId}`);
 
-    console.log("sending request...");
     return this.http.post<any>(this.apiUrl + '/user/logout', formdata);
   }
 
@@ -41,7 +39,6 @@ export class UserService {
     formdata.append('username', username);
     formdata.append('password', password);
 
-    console.log("sending request...");
     return this.http.post<any>(this.apiUrl + '/user', formdata);
   }
 

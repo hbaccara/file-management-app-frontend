@@ -15,6 +15,23 @@
   width: auto;
 }
 
+#control-area{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 115px;
+}
+
+#data-table-area{
+    position: absolute;
+    top: 115px;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+}
+
 .default-cursor {
   cursor: default;
 }
