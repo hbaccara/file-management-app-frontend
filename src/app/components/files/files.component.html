@@ -75,7 +75,7 @@
         </div>
       </div>
 
-      <table class="table table-hover" *ngSwitchCase="true">
+      <table *ngSwitchCase="true" class="table table-hover" [ngClass]="{'border border-primary': tableIsDraggedOver}">
         <thead>
           <tr class="d-flex" [ngClass]="{'table-primary': tableIsDraggedOver}">
             <th class="col-6">Name</th>
@@ -85,7 +85,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of files" class="d-flex noselect default-cursor align-middle" [@fadeInOut] [ngClass]="{'table-active': item === selectedFile && !tableIsDraggedOver, 'table-primary': (item === draggedOverFolder || tableIsDraggedOver)}"
+          <tr *ngFor="let item of files" class="d-flex noselect default-cursor align-middle" [@fadeInOut] 
+          [ngClass]="{'table-active': item === selectedFile && !tableIsDraggedOver, 'table-primary': item === draggedOverFolder || tableIsDraggedOver, 'border border-primary': item === draggedOverFolder}"
             (click)="select(item)" (dblclick)="openOrDownload(item)" draggable="true" (dragstart)="onDragStart($event, item)"
             (dragover)="onDragOver($event, item)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event, item)">
             <td class="col-6">
