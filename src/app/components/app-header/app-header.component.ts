@@ -51,6 +51,10 @@ export class AppHeaderComponent implements OnInit {
             this.getNotifications();
             this.watchNotifications();
           }
+          else{
+            this.notifications = undefined;
+            this.wsSubscription.unsubscribe();
+          }
         });
     }
   }
@@ -68,7 +72,6 @@ export class AppHeaderComponent implements OnInit {
 
       this.authService.setLoggedOut();
       this.router.navigate(['login']);
-
     });
   }
 
@@ -100,6 +103,24 @@ export class AppHeaderComponent implements OnInit {
     return unread;
   }
 
+  onNotificationClicked(notification: Notification): void {
+
+    this.markNotificationAsRead(notification);
+
+    if (notification.type == NotificationType[NotificationType.FILE_SHARED]) {
+      let fileShareNotification = notification as FileShareNotification;
+      
+      if (fileShareNotification.isFolder) {
+        // open the folder
+        this.router.navigate(['directory', fileShareNotification.fileId]);
+      }
+      else {
+        // download the file
+        this.fileService.download(fileShareNotification.fileId);
+      }
+    }
+  }
+
   markNotificationAsRead(notification: Notification): void {
     this.notificationService.markAsRead(notification.id).subscribe(notification_ => {
 
@@ -121,19 +142,4 @@ export class AppHeaderComponent implements OnInit {
     return notificationTitle;
   }
 
-  downloadFileOrOpenFolder(notification: Notification): void {
-
-    if (notification.type == NotificationType[NotificationType.FILE_SHARED]) {
-      let fileShareNotification = notification as FileShareNotification;
-
-      if (fileShareNotification.isFolder) {
-        // open the folder
-        this.router.navigate(['directory', fileShareNotification.fileId]);
-      }
-      else {
-        // download the file
-        this.fileService.download(fileShareNotification.fileId);
-      }
-    }
-  }
 }

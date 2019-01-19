@@ -1,6 +1,7 @@
 .notifications {
   list-style: none;
-  padding: 0; }
+  padding: 0; 
+}
 
 .notification {
   display: block;
@@ -10,58 +11,78 @@
   border-color: #e9ecef;
   background-color: #ffffff;
   color: #212529;
-  text-decoration: none; }
-  .notification:last-child {
-    border-bottom: 0;
-    border-radius: 0 0 0.25rem 0.25rem; }
-  .notification:hover, .notification.active:hover {
-    background-color: #f9f9f9;
-    border-color: #dee2e6;
-    text-decoration: none; }
-  .notification.active {
-    background-color: #efefef; }
+  text-decoration: none; 
+  cursor: pointer;
+}
+
+.notification:last-child {
+  border-bottom: 0;
+  border-radius: 0 0 0.25rem 0.25rem; 
+}
+
+.notification:hover, .notification.active:hover {
+  background-color: #f9f9f9;
+  border-color: #dee2e6;
+  text-decoration: none; 
+}
+
+.notification.active {
+  background-color: #efefef; 
+}
 
 .notification-title {
   font-size: 1em;
-  margin-bottom: 0; }
+  margin-bottom: 0; 
+}
 
 .notification-desc {
   margin-bottom: 0;
-  font-size: 0.94em; }
+  font-size: 0.94em; 
+}
 
 .notification-meta {
-  color: #868e96; }
+  color: #868e96; 
+}
 
 .dropdown-notifications > .dropdown-container,
 .dropdown-notifications > .dropdown-menu {
   width: 450px;
-  max-width: 450px; }
+  max-width: 450px; 
+}
 
 .dropdown-notifications > .dropdown-container {
-  margin-top: 0.6rem; }
+  margin-top: 0.6rem; 
+}
 
 .dropdown-notifications .dropdown-menu {
-  padding: 0; }
+  padding: 0; 
+}
 
 .dropdown-notifications .dropdown-toolbar,
 .dropdown-notifications .dropdown-footer {
-  padding: 0.8em; }
+  padding: 0.8em; 
+}
 
 .dropdown-notifications .dropdown-toolbar {
-  background: #ffffff; }
+  background: #ffffff; 
+}
 
 .dropdown-notifications .dropdown-footer {
-  background: #ced4da; }
+  background: #ced4da; 
+}
 
 .dropdown-notifications .dropdown-toggle::after {
-  display: none; }
+  display: none; 
+}
 
 .navbar .dropdown-notifications .dropdown-menu {
-  position: static; }
+  position: static; 
+}
 
 .notification-icon {
   margin-right: 0.49125rem;
-  vertical-align: middle; }
+  vertical-align: middle; 
+}
 
 .notification-icon:after {
   position: absolute;
@@ -82,7 +103,8 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; }
 
 .notification .media-body {
-  padding-top: 0; }
+  padding-top: 0; 
+}
 
 .btn-lg .notification-icon:after {
   margin-left: -0.5895rem;
@@ -90,7 +112,8 @@
   min-width: 1.179rem;
   height: 1.179rem;
   line-height: 1.179rem;
-  font-size: 0.9825rem; }
+  font-size: 0.9825rem; 
+}
 
 .btn-xs .notification-icon:after {
   content: '';
@@ -99,7 +122,9 @@
   min-width: 0.4465909091rem;
   height: 0.4465909091rem;
   line-height: 0.4465909091rem;
-  padding: 0; }
+  padding: 0; 
+}
 
 .btn-xs .notification-icon {
-  margin-right: 0.245625rem; }
+  margin-right: 0.245625rem; 
+}

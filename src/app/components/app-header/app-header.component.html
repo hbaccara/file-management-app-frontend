@@ -31,15 +31,14 @@
 
                 <ul *ngSwitchCase="true" class="notifications">
 
-                    <li *ngFor="let notification of notifications" class="notification" (click)="markNotificationAsRead(notification)"
+                    <li *ngFor="let notification of notifications" class="notification" (click)="onNotificationClicked(notification)"
                         [class.active]="!notification.isRead">
                         <div class="media">
                             <div class="media-body">
                                 <strong class="notification-title">{{getNotificationTitle(notification)}}</strong>
 
                                 <p class="notification-desc" [ngSwitch]="notification.type">
-                                    <a *ngSwitchCase="notificationType[notificationType.FILE_SHARED]" [routerLink]=""
-                                        (click)="downloadFileOrOpenFolder(notification)"> {{notification.filename}} </a>
+                                    <a *ngSwitchCase="notificationType[notificationType.FILE_SHARED]" [routerLink]=""> {{notification.filename}} </a>
                                 </p>
 
                                 <div class="notification-meta">

@@ -35,7 +35,7 @@ export class AuthService {
 
   setLoggedOut(): void {
 
-    this.userId = null;
+    this.userId = undefined;
     this.cookieService.delete(SESSION_COOKIE_NAME);
     this.isLoggedInSubject.next(false);
   }
