@@ -15,7 +15,7 @@ import { RenameFormComponent } from './components/rename-form/rename-form.compon
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
-import { myRxStompConfig } from './my-rx-stomp.config';
+import { myRxStompConfig } from './rx-stomp.config';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NotifierModule } from 'angular-notifier';
 import { FileShareFormComponent } from './components/file-share-form/file-share-form.component';
