@@ -27,7 +27,7 @@ const FILE_TO_MOVE_ID_DATA_KEY = "fileToMoveId";
       state('void', style({
         opacity: 0
       })),
-      transition('void <=> *', animate(1000)),
+      transition('void <=> *', animate(700)),
     ])
   ]
 })
