@@ -88,10 +88,6 @@ export class FilesComponent implements OnInit {
     }
   }
 
-  share() {
-    this.fileShareFormComponent.showForm(this.selectedFile);
-  }
-
   getFiles(): void {
 
     this.loadingData = true;
@@ -151,8 +147,28 @@ export class FilesComponent implements OnInit {
       });
   }
 
-  download(): void {
-    this.fileService.download(this.selectedFile.id);
+  createNewFolder(): void {
+    this.folderCreationFormComponent.showForm(this.currentDirectoryId);
+  }
+
+  uploadFile(): void {
+    this.fileUploadFormComponent.showForm(this.currentDirectoryId);
+  }
+
+  rename(): void {
+    this.renameFormComponent.showForm(this.selectedFile);
+  }
+
+  share() {
+    this.fileShareFormComponent.showForm(this.selectedFile);
+  }
+
+  delete(): void {
+    this.deleteConfirmFormComponent.showForm(this.selectedFile);
+  }
+
+  select(file: File): void {
+    this.selectedFile = file;
   }
 
   openOrDownload(file: File): void {
@@ -166,28 +182,28 @@ export class FilesComponent implements OnInit {
     }
   }
 
-  select(file: File): void {
-    this.selectedFile = file;
+  download(): void {
+    this.fileService.download(this.selectedFile.id);
   }
 
-  delete(): void {
-    this.deleteConfirmFormComponent.showForm(this.selectedFile);
+  move(file: File, newParentId: number): void {
+
+    this.fileService.move(file.id, newParentId)
+      .subscribe((resp) => {
+
+        // remove the item from the current directory
+        let fileIndex = this.files.findIndex(x => x === file);
+        this.files.splice(fileIndex, 1);
+
+        this.notifierService.notify('success', 'Item moved!');
+
+      }, (err) => {
+        this.notifierService.notify('error', 'An error occured while moving the item!');
+      });
   }
 
   onItemDeleted(): void {
     this.selectedFile = null;
-  }
-
-  createNewFolder(): void {
-    this.folderCreationFormComponent.showForm(this.currentDirectoryId);
-  }
-
-  uploadFile(): void {
-    this.fileUploadFormComponent.showForm(this.currentDirectoryId);
-  }
-
-  rename(): void {
-    this.renameFormComponent.showForm(this.selectedFile);
   }
 
   isHierarchyEmpty(): boolean {
@@ -226,27 +242,10 @@ export class FilesComponent implements OnInit {
     }
   }
 
-  move(file: File, newParentId: number): void {
-
-    this.fileService.move(file.id, newParentId)
-      .subscribe((resp) => {
-
-        // remove the item from the current directory
-        let fileIndex = this.files.findIndex(x => x === file);
-        this.files.splice(fileIndex, 1);
-
-        this.notifierService.notify('success', 'Item moved!');
-
-      }, (err) => {
-        this.notifierService.notify('error', 'An error occured while moving the item!');
-      });
-  }
-
   onDragStart(event: any, file: File) {
     console.log('started onDragStart()');
     event.dataTransfer.setData(FILE_TO_MOVE_ID_DATA_KEY, file.id);
   }
-
 
   onDragOver(event: any, file: File): void {
     event.preventDefault();
