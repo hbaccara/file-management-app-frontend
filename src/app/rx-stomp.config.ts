@@ -1,16 +1,16 @@
 import { InjectableRxStompConfig } from '@stomp/ng2-stompjs';
 import { environment } from '../environments/environment';
 
-export const myRxStompConfig: InjectableRxStompConfig = {
+export const rxStompConfig: InjectableRxStompConfig = {
   // Which server?
   brokerURL: environment.wsBrokerUrl,
 
   // Headers
   // Typical keys: login, passcode, host
-  /* connectHeaders: {
-    login: 'guest',
-    passcode: 'guest'
-  }, */
+  connectHeaders: {
+    // login: 'guest',
+    // passcode: 'guest'
+  },
 
   // How often to heartbeat?
   // Interval in milliseconds, set to 0 to disable

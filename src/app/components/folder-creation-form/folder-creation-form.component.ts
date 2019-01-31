@@ -2,7 +2,6 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, Input } from '@angular
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FileService } from '../../services/file.service';
 import { File } from "../../models/file";
-import { AuthService } from '../../services/auth.service';
 import { NotifierService } from 'angular-notifier';
 
 @Component({
@@ -23,7 +22,6 @@ export class FolderCreationFormComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
     private fileService: FileService,
-    private authService: AuthService,
     private notifierService: NotifierService) { }
 
   ngOnInit() {
@@ -47,7 +45,7 @@ export class FolderCreationFormComponent implements OnInit {
 
     if (!this.folderName) return;
 
-    this.fileService.createFolder(this.authService.userId, this.currentDirectoryId, this.folderName)
+    this.fileService.createFolder(this.currentDirectoryId, this.folderName)
       .subscribe(folder => {
 
         // add the folder to the directory

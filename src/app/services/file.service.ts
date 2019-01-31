@@ -3,10 +3,7 @@ import { HttpClient, HttpEvent, HttpRequest, HttpHeaders } from '@angular/common
 import { Observable} from 'rxjs';
 import { environment } from '../../environments/environment';
 import { File } from '../models/file';
-
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +12,11 @@ export class FileService {
 
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }  
+  constructor(private http: HttpClient, private authService: AuthService) { }  
 
-  uploadFile(userId: number, parentId: number, file: Blob): Observable<HttpEvent<any>> {
+  uploadFile(parentId: number, file: Blob): Observable<HttpEvent<any>> {
     const formdata: FormData = new FormData();
 
-    formdata.append('userId', `${userId}`);
     formdata.append('parentId', `${parentId}`);
     formdata.append('file', file);
 
@@ -32,24 +28,24 @@ export class FileService {
     return this.http.request(req);
   }
 
-  getFiles(userId: number, directoryId: number): Observable<any> {
+  getFiles(directoryId: number): Observable<any> {
 
-    return this.http.get<File[]>(`${this.apiUrl}/directory/${directoryId}?userId=${userId}`);
+    return this.http.get<File[]>(`${this.apiUrl}/directory/${directoryId}`);
   }
 
-  searchFiles(userId: number, searchTerm: string): Observable<File[]> {
+  searchFiles(searchTerm: string): Observable<File[]> {
 
-    return this.http.get<File[]>(`${this.apiUrl}/files/search?userId=${userId}&searchTerm=${searchTerm}`);
+    return this.http.get<File[]>(`${this.apiUrl}/files/search?searchTerm=${searchTerm}`);
   }
 
-  getFilesSharedWithUser(userId: number): Observable<File[]> {
+  getFilesSharedWithUser(): Observable<File[]> {
 
-    return this.http.get<File[]>(`${this.apiUrl}/files/shared-with-user?userId=${userId}`);
+    return this.http.get<File[]>(`${this.apiUrl}/files/shared-with-user`);
   }
 
   download(id: number): void {
 
-    window.location.href=`${this.apiUrl}/directory/download/${id}`;
+    window.location.href=`${this.apiUrl}/directory/download/${id}?t=${this.authService.authToken}`;
   }
 
   /** DELETE: delete the directory item from the server */
@@ -57,13 +53,12 @@ export class FileService {
     const id = typeof file === 'number' ? file : file.id;
     const url = `${this.apiUrl}/directory/${id}`;
 
-    return this.http.delete<File>(url, httpOptions);
+    return this.http.delete<File>(url);
   }
 
-  createFolder(userId: number, parentId: number, folderName: string): Observable<File> {
+  createFolder(parentId: number, folderName: string): Observable<File> {
     const formdata: FormData = new FormData();
 
-    formdata.append('userId', `${userId}`);
     formdata.append('parentId', `${parentId}`);
     formdata.append('folderName', folderName);
 

@@ -27,7 +27,6 @@ export class AppHeaderComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
     private fileService: FileService,
     private fileSearchService: FileSearchService,
     private notificationService: NotificationService,
@@ -68,7 +67,7 @@ export class AppHeaderComponent implements OnInit {
   }
 
   logout(): void {
-    this.userService.logout(this.authService.userId).subscribe(() => {
+    this.authService.logout().subscribe(() => {
 
       this.authService.setLoggedOut();
       this.router.navigate(['login']);
@@ -77,7 +76,7 @@ export class AppHeaderComponent implements OnInit {
 
   getNotifications(): void {
 
-    this.notificationService.getNotifications(this.authService.userId)
+    this.notificationService.getNotifications()
       .subscribe(data => this.notifications = data);
   }
 

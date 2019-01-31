@@ -14,14 +14,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RenameFormComponent } from './components/rename-form/rename-form.component';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
-import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
-import { myRxStompConfig } from './rx-stomp.config';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NotifierModule } from 'angular-notifier';
 import { FileShareFormComponent } from './components/file-share-form/file-share-form.component';
 import { DeleteConfirmFormComponent } from './components/delete-confirm-form/delete-confirm-form.component';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
 import { ExcludeUserPipe } from './pipes/exclude-user.pipe';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AddHeaderInterceptor } from 'src/app/http-interceptor'
 
 @NgModule({
   declarations: [
@@ -48,15 +49,15 @@ import { ExcludeUserPipe } from './pipes/exclude-user.pipe';
     ReactiveFormsModule,
     NotifierModule
   ],
-  providers: [CookieService, {
-    provide: InjectableRxStompConfig,
-    useValue: myRxStompConfig
-  },
+  providers: [
+    CookieService,
+    RxStompService,
     {
-      provide: RxStompService,
-      useFactory: rxStompServiceFactory,
-      deps: [InjectableRxStompConfig]
-    }],
+      provide: HTTP_INTERCEPTORS,
+      useClass: AddHeaderInterceptor,
+      multi: true,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

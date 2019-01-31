@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { Notification } from '../models/notification';
 import { environment } from '../../environments/environment';
@@ -24,9 +24,9 @@ export class NotificationService {
   }
 
   /** GET the notifications from the server */
-  getNotifications(userId: number): Observable<any> {
+  getNotifications(): Observable<any> {
 
-    return this.http.get<Notification[]>(`${this.apiUrl}/notification?userId=${userId}`);
+    return this.http.get<Notification[]>(`${this.apiUrl}/notification`);
   }
 
 }

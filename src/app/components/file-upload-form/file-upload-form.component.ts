@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, ViewEncapsulation, Input } from '@angular
 import { FileService } from '../../services/file.service';
 import { HttpResponse, HttpEventType } from '@angular/common/http';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { AuthService } from '../../services/auth.service';
 import { File } from '../../models/file';
 import { NotifierService } from 'angular-notifier';
 
@@ -26,7 +25,6 @@ export class FileUploadFormComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
     private fileService: FileService,
-    private authService: AuthService,
     private notifierService: NotifierService) { }
 
   ngOnInit() {
@@ -55,7 +53,7 @@ export class FileUploadFormComponent implements OnInit {
     this.progress.percentage = 0;
     this.currentFileUpload = this.selectedFiles.item(0);
 
-    this.fileService.uploadFile(this.authService.userId, this.currentDirectoryId, this.currentFileUpload)
+    this.fileService.uploadFile(this.currentDirectoryId, this.currentFileUpload)
       .subscribe(event => {
 
         if (event.type === HttpEventType.UploadProgress) {

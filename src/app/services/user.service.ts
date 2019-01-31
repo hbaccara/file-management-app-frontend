@@ -14,32 +14,13 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  login(username: string, password: string): Observable<any> {
-
-    const formdata: FormData = new FormData();
-
-    formdata.append('username', username);
-    formdata.append('password', password);
-
-    return this.http.post<any>(this.apiUrl + '/user/login', formdata);
-  }
-
-  logout(userId: number): Observable<any> {
-
-    const formdata: FormData = new FormData();
-
-    formdata.append('userId', `${userId}`);
-
-    return this.http.post<any>(this.apiUrl + '/user/logout', formdata);
-  }
-
   register(username: string, password: string): Observable<any> {
     const formdata: FormData = new FormData();
 
     formdata.append('username', username);
     formdata.append('password', password);
 
-    return this.http.post<any>(this.apiUrl + '/user', formdata);
+    return this.http.post<any>(this.apiUrl + '/user/register', formdata);
   }
 
   /* GET users whose username contains search term */

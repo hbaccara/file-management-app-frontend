@@ -11,10 +11,10 @@ import { FileShareFormComponent } from '../file-share-form/file-share-form.compo
 import { ActivatedRoute, Router } from '@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FILE_EXTENSIONS } from '../../constants/file-extensions';
-import { AuthService } from '../../services/auth.service';
 import { FileSearchService } from 'src/app/services/file-search.service';
 import { NotifierService } from 'angular-notifier';
 import { HttpResponse, HttpEventType } from '@angular/common/http';
+import { AuthService } from 'src/app/services/auth.service';
 
 const FILE_TO_MOVE_ID_DATA_KEY = "fileToMoveId";
 
@@ -55,9 +55,9 @@ export class FilesComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fileService: FileService,
-    private authService: AuthService,
     private fileSearchService: FileSearchService,
-    private notifierService: NotifierService
+    private notifierService: NotifierService,
+    private authService: AuthService
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
@@ -92,7 +92,7 @@ export class FilesComponent implements OnInit {
 
     this.loadingData = true;
 
-    this.fileService.getFiles(this.authService.userId, this.currentDirectoryId)
+    this.fileService.getFiles(this.currentDirectoryId)
       .subscribe(response => {
 
         this.files = this.sortFiles(response.files);
@@ -113,7 +113,7 @@ export class FilesComponent implements OnInit {
 
     this.loadingData = true;
 
-    this.fileService.searchFiles(this.authService.userId, searchTerm)
+    this.fileService.searchFiles(searchTerm)
       .subscribe(files => {
 
         this.files = this.sortFiles(files);
@@ -132,7 +132,7 @@ export class FilesComponent implements OnInit {
 
     this.loadingData = true;
 
-    this.fileService.getFilesSharedWithUser(this.authService.userId)
+    this.fileService.getFilesSharedWithUser()
       .subscribe(files => {
 
         this.files = this.sortFiles(files);
@@ -324,7 +324,7 @@ export class FilesComponent implements OnInit {
 
     const uploadFile = (file: Blob, directoryId: number) => {
       return new Promise((resolve, reject) => {
-        this.fileService.uploadFile(this.authService.userId, directoryId, file)
+        this.fileService.uploadFile(directoryId, file)
           .subscribe(event => {
 
             if (event.type === HttpEventType.UploadProgress) {
@@ -348,7 +348,7 @@ export class FilesComponent implements OnInit {
 
     const createFolder = (folderName) => {
       return new Promise((resolve, reject) => {
-        this.fileService.createFolder(this.authService.userId, directoryId, folderName)
+        this.fileService.createFolder(directoryId, folderName)
           .subscribe(folder => {
 
             if (directoryId == this.currentDirectoryId) {
